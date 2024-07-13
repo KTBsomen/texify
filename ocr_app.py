@@ -36,7 +36,7 @@ def load_processor_cached():
 @st.cache_data()
 def infer_image(pil_image, bbox, temperature):
     input_img = pil_image.crop(bbox)
-    model_output = batch_inference([input_img], model, processor,pipe temperature=temperature)
+    model_output = batch_inference([input_img], model, processor,pipe, temperature=temperature)
     return model_output[0]
 
 
