@@ -6,6 +6,8 @@ import torch
 from typing import Optional, Tuple
 
 from transformers import AutoModel, VisionEncoderDecoderModel
+from transformers import AutoProcessor 
+from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline 
 from transformers.models.donut.modeling_donut_swin import DonutSwinPatchEmbeddings, DonutSwinEmbeddings, DonutSwinModel, \
     DonutSwinEncoder
 
@@ -23,6 +25,27 @@ def load_model(checkpoint=settings.MODEL_CHECKPOINT, device=settings.TORCH_DEVIC
     print(f"Loaded texify model to {device} with {dtype} dtype")
     return model
 
+def load_question_model():
+    torch.random.manual_seed(0) 
+    model = AutoModelForCausalLM.from_pretrained( 
+        "microsoft/Phi-3-mini-4k-instruct",  
+        device_map="auto",  
+        torch_dtype="auto",  
+        trust_remote_code=True,  
+    ) 
+
+    tokenizer = AutoTokenizer.from_pretrained("microsoft/Phi-3-mini-4k-instruct") 
+
+
+    pipe = pipeline( 
+        "text-generation", 
+        model=model, 
+        tokenizer=tokenizer, 
+    ) 
+    print("Pipeline loaded for Phi-3-mini-4k-instruct")
+    return pipe
+
+    
 
 class VariableDonutSwinEmbeddings(DonutSwinEmbeddings):
     """

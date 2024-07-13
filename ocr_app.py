@@ -23,6 +23,10 @@ MAX_HEIGHT = 1000
 def load_model_cached():
     return load_model()
 
+@st.cache_resource()
+def load_question_model_cached():
+    return load_question_model()
+
 
 @st.cache_resource()
 def load_processor_cached():
@@ -32,7 +36,7 @@ def load_processor_cached():
 @st.cache_data()
 def infer_image(pil_image, bbox, temperature):
     input_img = pil_image.crop(bbox)
-    model_output = batch_inference([input_img], model, processor, temperature=temperature)
+    model_output = batch_inference([input_img], model, processor,pipe temperature=temperature)
     return model_output[0]
 
 
@@ -97,6 +101,7 @@ col1, col2 = st.columns([.7, .3])
 
 model = load_model_cached()
 processor = load_processor_cached()
+pipe=load_question_model_cached()
 
 in_file = st.sidebar.file_uploader("PDF file or image:", type=["pdf", "png", "jpg", "jpeg", "gif", "webp"])
 if in_file is None:
