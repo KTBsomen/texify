@@ -11,6 +11,7 @@ import pypdfium2
 
 from texify.inference import batch_inference
 from texify.model.model import load_model
+from texify.model.model import load_question_model
 from texify.model.processor import load_processor
 from texify.output import replace_katex_invalid
 from PIL import Image
@@ -36,7 +37,7 @@ def load_processor_cached():
 @st.cache_data()
 def infer_image(pil_image, bbox, temperature):
     input_img = pil_image.crop(bbox)
-    model_output = batch_inference([input_img], model, processor,pipe temperature=temperature)
+    model_output = batch_inference([input_img], model, processor,pipe, temperature=temperature)
     return model_output[0]
 
 

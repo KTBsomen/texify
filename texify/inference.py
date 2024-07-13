@@ -76,7 +76,7 @@ def _getQuestions(text,pipe,messages=None,generation_args=None):
     "do_sample": False, 
     }
     if(type(text)== str):
-    _generation_args["max_new_tokens"]=len(text)
+        _generation_args["max_new_tokens"]=len(text)
     if messages==None:
         messages=_messages
     if generation_args==None:
@@ -86,7 +86,7 @@ def _getQuestions(text,pipe,messages=None,generation_args=None):
     
 
     
-def batch_inference(images, model, processor,pipe temperature=settings.TEMPERATURE, max_tokens=settings.MAX_TOKENS):
+def batch_inference(images, model, processor,pipe, temperature=settings.TEMPERATURE, max_tokens=settings.MAX_TOKENS):
     images = [image.convert("RGB") for image in images]
     encodings = processor(images=images, return_tensors="pt", add_special_tokens=False)
     pixel_values = encodings["pixel_values"].to(model.dtype)
@@ -107,7 +107,7 @@ def batch_inference(images, model, processor,pipe temperature=settings.TEMPERATU
 
     generated_text = processor.tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
     generated_text = [postprocess(text) for text in generated_text]
-    data =_getQuestions(generated_text)
+    data =_getQuestions(generated_text,pipe)
     return data
 
 
