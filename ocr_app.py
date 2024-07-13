@@ -38,7 +38,7 @@ def load_processor_cached():
 def infer_image(pil_image, bbox, temperature):
     input_img = pil_image.crop(bbox)
     model_output = batch_inference([input_img], model, processor,pipe, temperature=temperature)
-    return model_output[0]
+    return model_output
 
 
 def open_pdf(pdf_file):
